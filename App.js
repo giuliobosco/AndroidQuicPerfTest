@@ -12,32 +12,36 @@ export default class App extends React.Component {
 			tcpDownloadEndTime: '-1',
 			quicDownloadStartTime: '-1',
 			quicDownloadEndTime: '-1',
-			address: 'https://gb-lab03.cscs.ch',
+			address: 'http://gb-lab03.cscs.ch',
 			quicPort: 2016,
 			tcpPort: 2017,
-			page: 'index.html'
+			page: 'large.bin'
 		};
 	}
 
 	_downloadTcp = () => {
 		this.setState({tcpDownloadStartTime: Date.now()});
-		var uri = this.state.address + ':' + this.state.tcpPort + '/' + this.state.page;
+		let uri = this.state.address + ':' + this.state.tcpPort + '/' + this.state.page;
+		let fileUri = FileSystem.documentDirectory + 'small_tcp.bin';
 		FileSystem.downloadAsync(
 			uri,
-			FileSystem.documentDirectory + 'small_tcp.bin'
+			fileUri
 		).then(({uri}) => {
-			this.setState({tcpDownloadEndTime: Date.now()})
+			this.setState({tcpDownloadEndTime: Date.now()});
+			FileSystem.deleteAsync(fileUri);
 		})
 	};
 
 	_downloadQuic = () => {
 		this.setState({quicDownloadStartTime: Date.now()});
-		var uri = this.state.address + ':' + this.state.quicPort + '/' + this.state.page;
+		let uri = this.state.address + ':' + this.state.quicPort + '/' + this.state.page;
+		let fileUri = FileSystem.documentDirectory + 'small_quic.bin';
 		FileSystem.downloadAsync(
 			uri,
-			FileSystem.documentDirectory + 'small_quic.bin'
+			fileUri
 		).then(({uri}) => {
 			this.setState({quicDownloadEndTime: Date.now()})
+			FileSystem.deleteAsync(fileUri);
 		});
 	};
 
